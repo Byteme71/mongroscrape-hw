@@ -8,23 +8,27 @@ var cheerio = require("cheerio");
 
 var db = require("./models");
 
-var PORT = process.env.PORT || 3000;
-
-
 var app = express();
 
 app.use(logger("dev"));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scrapingHw";
+var PORT = process.env.PORT || 3000;
 
-// Set mongoose to leverage built in JavaScript ES6 Promises
-// Connect to the Mongo DB
+var MONGODB_URI = PORT || process.env.MONGODB_URI || "mongodb://localhost/scrapingHw";
+
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
+
+if (process.env.MONGODB_URI) {
+  mongoose.connect(MONGODB_URI);
+} else {
+  mongoose.connect("mongodb://localhost/scrapingHw")
+};
 
 
 app.get("/scrape", function(req, res) {
