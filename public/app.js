@@ -12,6 +12,7 @@ $(document).ready(function () {
 
 
   $(document).on("click", ".scraper", function () {
+    $("#headline").empty();
 
     var thisId = $(this).attr("data-id");
 
@@ -24,6 +25,8 @@ $(document).ready(function () {
         url: "/articles/" + thisId
       }).then(function (data) {
         if (data) {
+          console.log("DATA *******", data);
+
           $("#headline").append(`<img src='${data.image}'>`);
           $("#headline").append(`<p data-id='${data._id}'>${data.headline}<br><a href='${data.url}' target='_blank'>Read here</a></p>`);
 
