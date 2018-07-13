@@ -2,7 +2,7 @@ $(document).ready(function () {
 
 
   $.getJSON("/articles", function (data) {
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
 
       $("#headline").append(`<img src='${data[i].image}'>`);
       $("#headline").append(`<p data-id='${data[i]._id}'>${data[i].headline}<br><a href='${data[i].url}' target='_blank'>Read here</a></p>`);
@@ -11,13 +11,11 @@ $(document).ready(function () {
   });
 
 
-  $(document).on("click", ".scraper", function () {
-    $("#headline").empty();
-
+  $(document).on("click", "#scraper", function () {
     $.ajax({
       method: "GET",
       url: "/scrape"
-    }).then(function () {
+    }).done(function () {
       location.reload();
     });
   });
