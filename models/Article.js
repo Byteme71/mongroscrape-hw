@@ -1,11 +1,8 @@
 var mongoose = require("mongoose");
 
-
 var Schema = mongoose.Schema;
 
-
 var ArticleSchema = new Schema({
- 
   image: {
     type: String,
     required: true
@@ -15,10 +12,12 @@ var ArticleSchema = new Schema({
     type: String,
     required: true
   },
+
   summary: {
     type: String,
     required: true
   },
+
   url: {
     type: String,
     required: true,
@@ -30,7 +29,6 @@ var ArticleSchema = new Schema({
     ref: "Note"
   }
 });
-
 
 var Article = mongoose.model("Article", ArticleSchema);
 

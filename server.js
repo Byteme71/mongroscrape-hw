@@ -27,7 +27,7 @@ mc.on("error", function(err) {
 
 mc.once("open", function() {
   console.log("MONGOOSE CONNECTED");
-})
+});
 
 app.use(logger("dev"));
 
@@ -38,22 +38,11 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 app.get("/scrape", function(req, res) {
-
   axios.get("https://www.nytimes.com/section/nyregion?action=click&pgtype=Homepage&region=TopBar&module=HPMiniNav&contentCollection=N.Y.&WT.nav=page").then(function (response) {
-
     var $ = cheerio.load(response.data);
 
-
     $("div.story-body").each(function (i, element) {
-
       var result = {};
-
-
-      // var image = $(element).children().children().children("img").attr("src");
-      // var headline = $(element).children("a").text().replace(/\s+/g, " ");
-      // var summary = $(element).children().find("p").text();
-      // var url = $(element).children("a").attr("href");
-
 
       result.image = $(this)
         .children().children().children("img").attr("src");
@@ -66,67 +55,48 @@ app.get("/scrape", function(req, res) {
 
       db.Article.create(result)
         .then(function(dbArticle) {
-
           console.log("DB_ARTICLE***********", dbArticle);
         })
         .catch(function(err) {
-
           return res.json(err);
-        });
-
-      
+        });    
     });
-    // res.send();
   });
 });
 
-
 app.get("/articles", function(req, res) {
-
   db.Article.find({})
     .then(function(dbArticle) {
-
       res.json(dbArticle);
     })
     .catch(function(err) {
-
       res.json(err);
     });
 });
-
 
 app.get("/articles/:id", function(req, res) {
-
   db.Article.findOne({ _id: req.params.id })
-
     .populate("notes")
     .then(function(dbArticle) {
-
       res.json(dbArticle);
     })
     .catch(function(err) {
-
       res.json(err);
     });
 });
 
-
 app.post("/comments/:id", function(req, res) {
-
   db.Note.create(req.body)
     .then(function(dbNote) {
       return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
     })
     .then(function(dbArticle) {
-
       res.json(dbArticle);
     })
     .catch(function(err) {
-
       res.json(err);
     });
 });
-
 
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");
