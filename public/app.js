@@ -1,22 +1,17 @@
 $(document).ready(function () {
 
 
-  $(document).on("click", ".scraper", function () {
+  $.getJSON("/articles", function (data) {
+    for (var i = 0; i < data.length; i++) {
 
-    $.getJSON("/articles", function (data) {
-      for (var i = 0; i < data.length; i++) {
-
-        $("#headline").append(`<img src='${data[i].image}'>`);
-        $("#headline").append(`<p data-id='${data[i]._id}'>${data[i].headline}<br><a href='${data[i].url}' target='_blank'>Read here</a></p>`);
-        // $("#headline").append("<img src='" + data[i].image +"'/>" + "<p data-id='" + data[i]._id + "'>" + data[i].headline + "<br />" + "<a href='" + data[i].url + "'" + "</p>");
-      }
-    });
-  })
+      $("#headline").append(`<img src='${data[i].image}'>`);
+      $("#headline").append(`<p data-id='${data[i]._id}'>${data[i].headline}<br><a href='${data[i].url}' target='_blank'>Read here</a></p>`);
+      // $("#headline").append("<img src='" + data[i].image +"'/>" + "<p data-id='" + data[i]._id + "'>" + data[i].headline + "<br />" + "<a href='" + data[i].url + "'" + "</p>");
+    }
+  });
 
 
   $(document).on("click", ".scraper", function () {
-
-    var thisId = $(this).attr("data-id");
 
     $.ajax({
       method: "GET",
@@ -24,10 +19,9 @@ $(document).ready(function () {
     }).then(function (data) {
       $.ajax({
         method: "GET",
-        url: "/articles/" + thisId
+        url: "/articles"
       }).then(function (data) {
         console.log("DATA**********", data);
-        hideDiv.show();
         location.reload();
       });
     });
