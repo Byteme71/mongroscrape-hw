@@ -14,22 +14,11 @@ $(document).ready(function () {
   $(document).on("click", ".scraper", function () {
     $("#headline").empty();
 
-    var thisId = $(this).attr("data-id");
-
     $.ajax({
       method: "GET",
       url: "/scrape"
     }).then(function () {
-      $.ajax({
-        method: "GET",
-        url: "/articles/" + thisId
-      }).then(function (data) {
-        if (data) {
-          console.log("DATA *******", data);
-
-          location.reload();
-        }
-      });
+      location.reload();
     });
   });
 
