@@ -19,16 +19,13 @@ $(document).ready(function () {
     $.ajax({
       method: "GET",
       url: "/scrape"
-    }).then(function (data) {
+    }).then(function () {
       $.ajax({
         method: "GET",
         url: "/articles/" + thisId
       }).then(function (data) {
         if (data) {
           console.log("DATA *******", data);
-
-          $("#headline").append(`<img src='${data.image}'>`);
-          $("#headline").append(`<p data-id='${data._id}'>${data.headline}<br><a href='${data.url}' target='_blank'>Read here</a></p>`);
 
           location.reload();
         }
