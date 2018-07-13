@@ -13,19 +13,19 @@ $(document).ready(function () {
 
   $(document).on("click", ".scraper", function () {
 
+    var thisId = $(this).attr("data-id");
+
     $.ajax({
       method: "GET",
       url: "/scrape"
     }).then(function (data) {
       $.ajax({
         method: "GET",
-        url: "/articles"
+        url: "/articles/" + thisId
       }).then(function (data) {
         if (data) {
-          location.assign('/');
+          location.reload();
         }
-      }).catch(function(err) {
-        res.send("CATCH ME *** ", err);
       });
     });
   });
