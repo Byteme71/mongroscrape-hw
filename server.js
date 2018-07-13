@@ -5,10 +5,29 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-
 var db = require("./models");
 
 var app = express();
+
+var PORT = process.env.PORT || 3000;
+
+var databaseURL = "mongodb://localhost/scrapingHw";
+
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI);
+} else {
+  mongoose.connect(databaseURL);
+};
+
+var mc = mongoose.connection;
+
+mc.on("error", function(err) {
+  console.log("MONGOOSE ERROR", err);
+});
+
+mc.once("open", function() {
+  console.log("MONGOOSE CONNECTED");
+})
 
 app.use(logger("dev"));
 
@@ -17,19 +36,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static("public"));
-
-var PORT = process.env.PORT || 3000;
-
-var MONGODB_URI = PORT || process.env.MONGODB_URI || "mongodb://localhost/scrapingHw";
-
-mongoose.Promise = Promise;
-
-if (process.env.MONGODB_URI) {
-  mongoose.connect(MONGODB_URI);
-} else {
-  mongoose.connect("mongodb://localhost/scrapingHw")
-};
-
 
 app.get("/scrape", function(req, res) {
 
