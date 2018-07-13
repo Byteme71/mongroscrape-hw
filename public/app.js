@@ -21,8 +21,11 @@ $(document).ready(function () {
         method: "GET",
         url: "/articles"
       }).then(function (data) {
-        console.log("DATA**********", data);
-        location.reload();
+        if (data) {
+          location.assign('/');
+        }
+      }).catch(function(err) {
+        res.send("CATCH ME *** ", err);
       });
     });
   });
